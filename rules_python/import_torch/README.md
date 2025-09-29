@@ -659,3 +659,46 @@ TLDR:
     ```
   - **It seems that indeed the `..` RPATHs on symlink `so`s do not work, and instead get applied to `../` of the original file.**
 4. After this, the next times `RPATH from ` only includes `/test.runfiles/_main/_test.venv/lib/python3.12/site-packages/torch/lib`, and other paths listed in step 1 are excluded. I suspect because they are marked as invalid in step 3 and they are just not tried anymore.
+
+
+## Why UV works
+
+if you do 
+
+```
+uv venv .venv
+uv pip install torch --link-mode=symlink
+```
+
+it also uses links, but torch can be imported with no problem. The difference is that
+
+ Check Mark Button Emoji | Meaning, Copy And Paste
+
+✅ **Venv that UV makes**: resolves torch/lib/../../cuspraselt/lib/libcusparseLt.so
+```
+nvidia/
+  __init__.py         # symlink
+  cublas/
+    __init__.py       # symlink
+    lib/
+      libcublas.so.12 # symlink
+      ...
+torch/
+   _C.so...                    # symlink
+   libs/
+     lib_torch_python.so....   # symlink
+     ...
+```
+
+❌ **Venv that Bazel makes**: cannot resolve torch/lib/../../cuspraselt/lib/libcusparseLt.so
+
+```
+nvidia/
+  __init__.py         # symlink
+  cublas/
+    __init__.py       # symlink
+    lib/
+      libcublas.so.12 # symlink
+      ...
+torch/                # symlink
+```

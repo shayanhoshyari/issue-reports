@@ -1,0 +1,17 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_uv//uv:pip.bzl", "pip_compile")
+
+
+py_binary(
+    name = "test",
+    srcs = ["test.py"],
+    deps = [
+        "@pypi//torch",
+    ],
+)
+
+pip_compile(
+    name = "requirements",
+    requirements_in = "//:requirements.in", 
+    requirements_txt = "//:requirements.txt", 
+)

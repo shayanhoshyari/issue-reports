@@ -1,0 +1,30 @@
+"""Site-packages example."""
+
+bazel_dep(name = "rules_python", version = "0.0.0")
+bazel_dep(name = "rules_uv", version = "0.88.0")
+bazel_dep(name = "platforms", version = "0.0.11")
+
+# Use latest
+git_override(
+    module_name = "rules_python",
+    remote = "https://github.com/bazel-contrib/rules_python.git",
+    commit = "5dfd1993ab797b179e5e85064edd2638263dab73",
+)
+
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    experimental_index_url = "https://pypi.org/simple",
+    hub_name = "pypi",
+    python_version = "3.12",
+    requirements_lock = "requirements.txt",
+    enable_implicit_namespace_pkgs = True,
+)
+
+use_repo(pip, "pypi")

@@ -32,6 +32,8 @@ subprocess.CalledProcessError: Command '['/private/var/tmp/_bazel_hoshyari/5bf49
 ### `rules_python == 1.7.0` and `--@rules_python//python/config_settings:bootstrap_impl=script` works
 
 ```
+$ ./bazel run :test  --@rules_python//python/config_settings:bootstrap_impl=script
+
 sys.executable is /private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/_main/_test.venv/bin/python3
 0.36.0
 ```

@@ -5,6 +5,7 @@ To reproduce the issue, run:
 ```
 $ ./bazel run //:test
 
+sys.executable is /private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/rules_python++python+python_3_13_aarch64-apple-darwin/bin/python3
 /private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/rules_python++python+python_3_13_aarch64-apple-darwin/bin/python3: No module named datamodel_code_generator
 Traceback (most recent call last):
   File "/private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/_main/_test_stage2_bootstrap.py", line 499, in <module>
@@ -19,7 +20,7 @@ Traceback (most recent call last):
   File "<frozen runpy>", line 287, in run_path
   File "<frozen runpy>", line 98, in _run_module_code
   File "<frozen runpy>", line 88, in _run_code
-  File "/private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/_main/test.py", line 6, in <module>
+  File "/private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/_main/test.py", line 7, in <module>
     subprocess.run([sys.executable, "-m", "datamodel_code_generator", "--version"], check=True)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/external/rules_python++python+python_3_13_aarch64-apple-darwin/lib/python3.13/subprocess.py", line 577, in run
@@ -28,10 +29,20 @@ Traceback (most recent call last):
 subprocess.CalledProcessError: Command '['/private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/rules_python++python+python_3_13_aarch64-apple-darwin/bin/python3', '-m', 'datamodel_code_generator', '--version']' returned non-zero exit status 1.
 ```
 
+### `rules_python == 1.7.0` and `--@rules_python//python/config_settings:bootstrap_impl=script` works
+
+```
+sys.executable is /private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/_main/_test.venv/bin/python3
+0.36.0
+```
+
+### `rules_python < 1.7.0` works
+
 To see that `rules_python < 1.7.0` don't have this issue, change `MODULE.bazel` to use `rules_python == 1.6.3` and retry:
 
 ```
 $ ./bazel run //:test
 
+sys.executable is /private/var/tmp/_bazel_hoshyari/5bf493163e144814d5d8244a8cb0233d/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/test.runfiles/rules_python++python+python_3_13_aarch64-apple-darwin/bin/python3
 0.36.0
 ```

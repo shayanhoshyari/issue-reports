@@ -68,11 +68,11 @@ However, with current result, the torch `.so` files return `File.is_symlink = Fa
 Uncommetning 
 
 ```
-git_override(
-    module_name = "rules_python",
-    remote = "https://github.com/shayanhoshyari/rules_python.git",
-    commit = "ff56c1dd51e742fceb8fda3de08446a031d3ed50",
-)
+# git_override(
+#     module_name = "rules_python",
+#     remote = "https://github.com/shayanhoshyari/rules_python.git",
+#     commit = "f48fdc08cec73e7440fc436935b8142054128bbc",
+# )
 ```
 
 to use <https://github.com/bazel-contrib/rules_python/pull/3440> in `MODULE.bazel`, I do get the same runfiles tree, but with `File.is_symlink = True` for the torch `.so` files.

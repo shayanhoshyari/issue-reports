@@ -58,4 +58,6 @@ Currently, `tar.bzl` (used for aspect_rules_py, rules_oci, ... family) does not 
 
 A suggestion by @rickeylev is to use the `File.is_symlink` field to determine if a file is a symlink and just write as-is as symlink and preserve the relative path.
 
+I did implement a basic tar rule equivalent based on this idea at: <https://github.com/bazel-contrib/rules_python/issues/3388#issuecomment-3615363362>
+
 However, with current result, the torch `.so` files return `File.is_symlink = False`, so we will end up writing the file to the tar twice (once the external runfile and once the one under .venv), and it can double the size of the tar (image layer). 

@@ -61,3 +61,18 @@ A suggestion by @rickeylev is to use the `File.is_symlink` field to determine if
 I did implement a basic tar rule equivalent based on this idea at: <https://github.com/bazel-contrib/rules_python/issues/3388#issuecomment-3615363362>
 
 However, with current result, the torch `.so` files return `File.is_symlink = False`, so we will end up writing the file to the tar twice (once the external runfile and once the one under .venv), and it can double the size of the tar (image layer). 
+
+
+## Experimental change
+
+Uncommetning 
+
+```
+git_override(
+    module_name = "rules_python",
+    remote = "https://github.com/shayanhoshyari/rules_python.git",
+    commit = "ff56c1dd51e742fceb8fda3de08446a031d3ed50",
+)
+```
+
+to use <https://github.com/bazel-contrib/rules_python/pull/3440> in `MODULE.bazel`, I do get the same runfiles tree, but with `File.is_symlink = True` for the torch `.so` files.

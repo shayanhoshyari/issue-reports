@@ -22,3 +22,18 @@ pip.parse(
 )
 
 use_repo(pip, "pypi")
+
+# With this change I do get the same runfiles tree, but with File.is_symlink = true
+# https://github.com/bazel-contrib/rules_python/pull/3440/
+# git_override(
+#     module_name = "rules_python",
+#     remote = "https://github.com/shayanhoshyari/rules_python.git",
+#     commit = "ff56c1dd51e742fceb8fda3de08446a031d3ed50",
+# )
+
+# Experimenting
+# local_path_override(
+#     module_name = "rules_python",
+#     path = "/Users/hoshyari/code/rules_python",
+# )
+

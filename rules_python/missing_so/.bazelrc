@@ -1,0 +1,2 @@
+common --@rules_python//python/config_settings:venvs_site_packages=yes
+common --@rules_python//python/config_settings:bootstrap_impl=script

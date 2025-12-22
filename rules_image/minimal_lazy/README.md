@@ -20,14 +20,12 @@ This directory captures the minimal pattern described in the chat with ChatGPT:
 
 ```bash
 cd rules_image/minimal_lazy
-./bazel build //:push \
-  --remote_download_outputs=minimal
+./bazel build //:push
 ```
 
 Notes:
 
 1. The wrapper caches Bazelisk in `${XDG_CACHE_HOME:-$HOME/.cache}/ai_platform`.
-2. The `.bazelrc` sets a default gRPC remote cache; override it locally if you
-   don't have access, e.g. `./bazel build //:push --remote_cache=file://$PWD/.remote-cache`.
-3. On a cache hit, Bazel records the output digest for `:layer` but does **not**
-   download `layer.blob` because nothing depends on the file contents.
+2. The `.bazelrc` sets a default gRPC remote cache
+3. **Expected behavior**: On a cache hit, Bazel records the output digest for `:layer` but does **not**
+   download `layer.blob` because nothing depends on the file contents. When there is not cache hit, it builds it and uploads it to the remote cache.

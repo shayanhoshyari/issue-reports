@@ -10,30 +10,41 @@ def _producer_impl(ctx):
 
     ctx.actions.run_shell(
         outputs = [out],
-        command = "sleep 10 && echo hello > {}".format(out.path),
+        command = "sleep 3 && dd if=/dev/zero of={} bs=1M count=1024".format(out.path),
         mnemonic = "ProduceBlob",
     )
 
     return DefaultInfo(files = depset([out]))
 
 def _shayan_push_impl(ctx):
-    """A rule that depends on `input` but never reads its files.
-
-    Because no action consumes the bytes, Bazel only needs the action cache
-    entry for `input` when deciding whether the output exists in the remote
-    cache. On a cache hit Bazel will *not* re-execute or download the blob.
+    """A rule that depends on `input`.
+    The goal of this rule is: Ensure input exits in remote cache
+    1. If input does not exist in remote cache, it builds it and uploads it
+    2. otherwise, it does not build or even download it.
     """
-    # Depending on the label is enough to put it in the action graph.
-    _ = ctx.attr.input
+    input = ctx.file.input
 
     exe = ctx.actions.declare_file(ctx.label.name)
 
-    ctx.actions.write(
-        output = exe,
-        content = """#!/bin/sh
+    # This is the secret sauce:
+    # 1. don't add input to DefaultInfo
+    # 2. Add a file to DefaultInfo (here exe), that needs input to be produced.
+    #
+    # It works because the final goal is to get exe, so if exe is in remote cache, input should
+    # not be materialized. In reality bazel is checking if exe is in remote cache, and not input
+    # :)
+    ctx.actions.run_shell(
+        inputs = [input],
+        outputs = [exe],
+        command = """
+cat > {} << 'EOF'
+#!/bin/sh
 echo "Lazy push: relying on remote cache entry for $1"
-""",
-        is_executable = True,
+echo "My input was $(stat -c%s {}) bytes"
+EOF
+chmod +x {}
+""".format(exe.path, input.path, exe.path),
+        mnemonic = "CreatePushScript",
     )
 
     return DefaultInfo(
@@ -47,6 +58,6 @@ producer = rule(
 
 shayan_push = rule(
     implementation = _shayan_push_impl,
-    attrs = {"input": attr.label(mandatory = True)},
+    attrs = {"input": attr.label(mandatory = True, allow_single_file = True)},
     executable = True,
 )

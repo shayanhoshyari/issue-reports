@@ -1,0 +1,4 @@
+# no rogue __init__.py
+build --incompatible_default_to_explicit_init_py
+common --remote_cache=grpc://pluto-prod-od1-hoshyari-bazel-remo-z6o5ed-1-0:8000
+common --remote_upload_local_results=true

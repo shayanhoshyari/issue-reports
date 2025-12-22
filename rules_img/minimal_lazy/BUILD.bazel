@@ -1,0 +1,13 @@
+load(":push_rules.bzl", "producer", "shayan_push")
+
+# Produces a blob via an action. The output is cacheable and uploadable.
+producer(
+    name = "layer",
+)
+
+# Depends on the producer but never reads its outputs. On a remote cache hit,
+# Bazel will skip execution and avoid downloading the blob bytes.
+shayan_push(
+    name = "push",
+    input = ":layer",
+)

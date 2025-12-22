@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+# ./bazel
+#
+# The proxy for running Bazel. Behind the scene makes sure bazel is installed, and will run it
+
+set -euo pipefail
+
+BAZELISK_VERSION="v1.27.0"
+PLATFORM="$(uname -ms)"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ai_platform"
+REPO_ROOT="$(realpath "$0" | xargs dirname | xargs dirname | xargs dirname)"
+GTOOLS="$REPO_ROOT/gtools"
+
+
+
+download_tool() {
+  local os="$1"
+  local arch="$2"
+  local out_file="$3"
+
+  if [[ "$arch" == x86_64 ]]; then
+    arch=amd64
+  fi
+
+  if ! command -v curl >/dev/null; then
+    echo "curl is required to download bazel/bazelisk." >&2
+    exit 1
+  fi
+
+  curl --retry 4 -L -o "$out_file" --progress-bar \
+    "https://github.com/bazelbuild/bazelisk/releases/download/$BAZELISK_VERSION/bazelisk-$os-$arch"
+}
+
+install_and_run_tool() {
+  # expects
+  # - $1 to be the tool name and
+  # - $2 to be the version of the tool
+  # - `download_tool` to be a function that receives os, cpu arch, and download path
+  # - the rest of the arguments to be the command line arguments to the tool
+
+  local tool_name="$1"
+  local tool_version="$2"
+  shift 2
+
+  local os
+  local arch
+
+
+  case "$PLATFORM" in
+    "Darwin arm64") os=darwin; arch=arm64 ;;
+    "Darwin x86_64") os=darwin; arch=x86_64 ;;
+    "Linux aarch64"|"Linux arm64") os=linux; arch=arm64 ;;
+    "Linux x86_64") os=linux; arch=x86_64 ;;
+    *) echo "Unsupported platform: $PLATFORM" && exit 255 ;;
+  esac
+
+  local tool_cache_dir="${CACHE_DIR}/${tool_name}/${tool_version}-${os}-${arch}"
+  local tool_executable="${tool_cache_dir}/${tool_name}"
+
+  # directory does not exist yet, download the tool
+  if [ ! -f "${tool_executable}" ]; then
+    echo "Downloading ${tool_name}..." >&2
+    local tmp_file
+
+    # Some macos versions do not support -p
+    # tmp_file="$(mktemp -d -p "${tool_cache_dir}")/${tool_name}"
+    tmp_file="$(mktemp -d)/${tool_name}"
+
+    local retry_count=0
+    local max_retries=2
+
+    mkdir -p "${tool_cache_dir}"
+    while [ $retry_count -lt $max_retries ]; do
+      if download_tool "$os" "$arch" "${tmp_file}"; then
+        chmod +x "${tmp_file}"
+        mv "${tmp_file}" "${tool_executable}"
+        rm -rf "$(dirname ${tmp_file})"
+        break
+      else
+        retry_count=$((retry_count + 1))
+        if [ $retry_count -lt $max_retries ]; then
+          echo "Download failed, retrying ($retry_count/$max_retries)..." >&2
+        else
+          echo "Failed to download ${tool_name} after $max_retries attempts" >&2
+          exit 255
+        fi
+      fi
+    done
+  fi
+
+  exec "${tool_executable}" "$@"
+}
+
+install_and_run_tool bazelisk "$BAZELISK_VERSION" "$@"

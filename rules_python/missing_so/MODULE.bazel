@@ -14,5 +14,6 @@ pip.parse(
     hub_name = "pip",
     python_version = "3.13",
     requirements_lock = "//requirements:requirements.txt",
+    enable_implicit_namespace_pkgs = True,
 )
 use_repo(pip, "pip")

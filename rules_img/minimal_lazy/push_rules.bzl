@@ -37,13 +37,14 @@ def _shayan_push_impl(ctx):
         inputs = [input],
         outputs = [exe],
         command = """
-cat > {} << 'EOF'
+INPUT_SIZE=$(du -h $(realpath {0}) | awk '{{print $1}}')
+cat > {1} << EOF
 #!/bin/sh
-echo "Lazy push: relying on remote cache entry for $1"
-echo "My input was $(stat -c%s {}) bytes"
+echo "Lazy push: relying on remote cache entry"
+echo "My input was \"$INPUT_SIZE bytes\""
 EOF
-chmod +x {}
-""".format(exe.path, input.path, exe.path),
+chmod +x {1}
+""".format(input.path, exe.path),
         mnemonic = "CreatePushScript",
     )
 

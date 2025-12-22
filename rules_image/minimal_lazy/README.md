@@ -21,7 +21,6 @@ This directory captures the minimal pattern described in the chat with ChatGPT:
 ```bash
 cd rules_image/minimal_lazy
 ./bazel build //:push \
-  --remote_upload_local_results=true \
   --remote_download_outputs=minimal
 ```
 

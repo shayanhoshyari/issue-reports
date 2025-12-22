@@ -10,7 +10,7 @@ def _producer_impl(ctx):
 
     ctx.actions.run_shell(
         outputs = [out],
-        command = "echo hello > {}".format(out.path),
+        command = "sleep 10 && echo hello > {}".format(out.path),
         mnemonic = "ProduceBlob",
     )
 

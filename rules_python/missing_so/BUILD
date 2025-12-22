@@ -10,7 +10,6 @@ py_binary(
     main = "__main__.py",
     deps = [
         "@pip//cowsay",
-        # Add torch to feel a giant dep. Actually not used.
         "@pip//torch",
     ],
 )

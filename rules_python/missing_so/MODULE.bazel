@@ -1,15 +1,18 @@
 bazel_dep(name = "rules_python", version = "1.7.0")
 
+# Uncomment to try main, comment to try 1.7.0
+git_override(module_name = "rules_python", remote = "https://github.com/bazelbuild/rules_python.git", commit = "9a20fc243a23399511023d78209590f776b36e38")
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-    python_version = "3.12",
+    python_version = "3.13",
 )
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     experimental_index_url = "https://pypi.org/simple",
     hub_name = "pip",
-    python_version = "3.12",
+    python_version = "3.13",
     requirements_lock = "//requirements:requirements.txt",
 )
 use_repo(pip, "pip")

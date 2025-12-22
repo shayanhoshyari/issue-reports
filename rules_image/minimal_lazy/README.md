@@ -12,30 +12,23 @@ This directory captures the minimal pattern described in the chat with ChatGPT:
   * `shayan_push`: executable rule that depends on `producer` but does not read
     its outputs, mirroring `rules_img`'s lazy push behaviour.
 * `BUILD.bazel` — wires the two rules together (`:layer` and `:push`).
-* `WORKSPACE.bazel` — declares a standalone workspace so you can `bazel build`
-  from this folder.
+* `.bazelrc` — pins the requested cache, Python, and `__init__.py` settings.
+* `bazel` — wrapper script that downloads Bazelisk on demand and proxies
+  invocations.
 
 ## How to try it
 
-Use any remote cache endpoint; a local file-based cache is enough to demonstrate
-behaviour:
-
 ```bash
 cd rules_image/minimal_lazy
-bazelisk build //:push \
-  --remote_cache=file://$PWD/.remote-cache \
+./bazel build //:push \
   --remote_upload_local_results=true \
   --remote_download_outputs=minimal
 ```
 
-What happens:
+Notes:
 
-1. On the first build Bazel executes `producer`, uploads `layer.blob`, and builds
-   the tiny `:push` executable.
-2. On a clean tree hitting the same cache, Bazel finds the `producer` action in
-   the remote cache, records the digest, **does not download** `layer.blob`, and
-   rebuilds only the small `:push` file.
-
-This matches the guidance from the conversation: as long as no downstream action
-calls `ctx.files.input` (or similar), Bazel only needs the action cache metadata
-and will not fetch the blob bytes from remote storage.
+1. The wrapper caches Bazelisk in `${XDG_CACHE_HOME:-$HOME/.cache}/ai_platform`.
+2. The `.bazelrc` sets a default gRPC remote cache; override it locally if you
+   don't have access, e.g. `./bazel build //:push --remote_cache=file://$PWD/.remote-cache`.
+3. On a cache hit, Bazel records the output digest for `:layer` but does **not**
+   download `layer.blob` because nothing depends on the file contents.

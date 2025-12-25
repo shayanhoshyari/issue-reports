@@ -1,0 +1,73 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: Bazel py run",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "bazel_debugpy.launch",
+            "args": [
+                "--hub-name=pip",
+                "--bazel=./bazel",
+                "run",
+                "${input:pickBazelPyRunTarget}",
+                "", // "${input:BazelArgs}"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                // This is necessary so that the the debugger hits breakpoints in original
+                // source and not the symlinks in bazel output.
+                "PYDEVD_RESOLVE_SYMLINKS": "1",
+                // This is needed to get `justMyCode` to work correctly.
+                // "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+            },
+        },
+        {
+            "name": "Python: Bazel py test",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "bazel_debugpy.launch",
+            "args": [
+                "--hub-name=pip",
+                "--bazel=./bazel",
+                "test",
+                "${input:pickBazelPyTestTarget}",
+                "", // "${input:BazelArgs}"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                // This is necessary so that the the debugger hits breakpoints in original
+                // source and not the symlinks in bazel output.
+                "PYDEVD_RESOLVE_SYMLINKS": "1",
+                // This is needed to get `justMyCode` to work correctly.
+                "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+            },
+        },
+
+    ],
+    "inputs": [
+        {
+            "id": "pickBazelPyRunTarget",
+            "type": "command",
+            "command": "bazel.pickTarget",
+            "args": {
+              "query": "kind('py_test|py_binary', //...:*)",
+            },
+        },
+        {
+            "id": "pickBazelPyTestTarget",
+            "type": "command",
+            "command": "bazel.pickTarget",
+            "args": {
+              "query": "kind('py_test', //...:*)",
+            },
+        },
+        {
+            "id": "BazelArgs",
+            "type": "promptString",
+            "description": "Optional args to pass to executable as single string",
+        },
+    ]
+}

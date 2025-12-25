@@ -34,17 +34,21 @@ def main() -> None:
 
     # Connect
     print("Connecting to debugpy")
-    # pydevd = debugpy.server.api.pydevd
-    # pydevd.SetupHolder.setup = {
-    #     "ppid": pydev_config["ppid"],
-    #     "client": pydev_config["client"],
-    #     "port": pydev_config["port"],
-    #     "client-access-token": pydev_config["client_access_token"],
-    # }
-    debugpy.connect([pydev_config["client"], pydev_config["port"]], access_token=pydev_config["client_access_token"])
+    debugpy.connect(
+        pydev_config["port"],
+        access_token=pydev_config["client_access_token"],
+        parent_session_pid=pydev_config["ppid"],
+    )
     debugpy.wait_for_client()
+    debugpy.debug_this_thread()
+
 
     print("Connection complete!")
+
+    # update debug connection, so processes this process launches show
+    # up correctly.
+    pydev_config["ppid"] = os.getpid()
+    os.environ["bzl_pydev_config"] = json.dumps(pydev_config)
 
 
 main()

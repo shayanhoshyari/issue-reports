@@ -9,12 +9,13 @@
             "program": "${workspaceFolder}/vscode/launch.py",
             "args": ["run", "${input:pickBazelPyRunTarget}"],
             "console": "integratedTerminal",
+            "justMyCode": false,
             "env": {
                 // This is necessary so that the the debugger hits breakpoints in original
                 // source and not the symlinks in bazel output.
                 "PYDEVD_RESOLVE_SYMLINKS": "1",
                 // This is needed to get `justMyCode` to work correctly.
-                "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+                // "IDE_PROJECT_ROOTS": "${workspaceFolder}",
             },
         },
         {

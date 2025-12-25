@@ -14,7 +14,6 @@ def main() -> None:
     info = {
         "ppid": os.getpid(),
         "sys_path": str(Path(debugpy.__file__).resolve().parents[1]),
-        "client": setup.get("client"),
         "port": setup.get("port"),
         "client_access_token": setup.get("client-access-token"),
     }

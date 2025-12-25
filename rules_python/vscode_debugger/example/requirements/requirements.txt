@@ -2,7 +2,7 @@
 #    bazel run @@//requirements:requirements
 --index-url https://pypi.org/simple
 
-bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@1ba5d34984e9387b24f35abe23f1f498f752daf7#subdirectory=rules_python/vscode_debugger/bazel_debugpy
+bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@db01029eb09e394133ff9fe18680ae1ffc613f74#subdirectory=rules_python/vscode_debugger/bazel_debugpy
     # via -r requirements/requirements.in
 cowsay==6.1 \
     --hash=sha256:274b1e6fc1b966d53976333eb90ac94cb07a450a700b455af9fbdf882244b30a

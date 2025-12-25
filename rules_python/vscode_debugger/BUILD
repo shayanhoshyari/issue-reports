@@ -28,6 +28,6 @@ py_test(
 
 py_library(
     name = "attach",
-    srcs = ["sitecustomize.py"],
+    srcs = ["sitecustomize_.py"],
     imports = ["."],
 )

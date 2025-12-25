@@ -6,8 +6,14 @@
             "name": "Python: Bazel py run",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/vscode/launch.py",
-            "args": ["run", "${input:pickBazelPyRunTarget}"],
+            "module": "bazel_debugpy.launch",
+            "args": [
+                "--hub-name=pip",
+                "--bazel=./bazel",
+                "test",
+                "${input:pickBazelPyRunTarget}",
+                "${input:BazelArgs}"
+            ],
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {
@@ -22,8 +28,14 @@
             "name": "Python: Bazel py test",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/vscode/launch.py",
-            "args": ["test", "${input:pickBazelPyTestTarget}"],
+            "module": "bazel_debugpy.launch",
+            "args": [
+                "--hub-name=pip",
+                "--bazel=./bazel",
+                "test",
+                "${input:pickBazelPyTestTarget}",
+                "${input:BazelArgs}"
+            ],
             "console": "integratedTerminal",
             "env": {
                 // This is necessary so that the the debugger hits breakpoints in original
@@ -51,6 +63,12 @@
             "args": {
               "query": "kind('py_test', //...:*)",
             },
+        },
+        {
+            "id": "BazelArgs",
+            "type": "promptString",
+            "default": "",
+            "description": "Optional args to pass to executable as single string",
         },
     ]
 }

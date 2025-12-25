@@ -24,10 +24,3 @@ py_test(
         "//mattress",
     ],
 )
-
-
-py_library(
-    name = "attach",
-    srcs = ["sitecustomize_.py"],
-    imports = ["."],
-)

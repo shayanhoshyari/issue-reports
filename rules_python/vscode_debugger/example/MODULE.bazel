@@ -1,3 +1,4 @@
+bazel_dep(name = "rules_uv", version = "0.89.2")
 bazel_dep(name = "rules_python")
 # commit with --debugger flag.
 git_override(module_name = "rules_python", remote = "https://github.com/bazelbuild/rules_python.git", commit = "a94bd0fdde426bf30efed7c819422d74b404cc18")

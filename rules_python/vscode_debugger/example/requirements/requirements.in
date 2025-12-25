@@ -1,2 +1,2 @@
 cowsay==6.1
-bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@7fa52c4535188e0bd9c4f92d34103d3832e93474#subdirectory=rules_python/vscode_debugger/bazel_debugpy
+bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@4d4c01f90001a91f35706f688cd96889260009c7#subdirectory=rules_python/vscode_debugger/bazel_debugpy

@@ -38,9 +38,9 @@ def main() -> None:
         args.target,
     ]
     if args.mode == "test":
-        env["bzl_pydev_config"] = info_json
-    else:
         cmd.append(f"--test_env=bzl_pydev_config={info_json}")
+    else:
+        env["bzl_pydev_config"] = info_json
     cmd.extend(others)
     os.execvpe(cmd[0], cmd, env)
 

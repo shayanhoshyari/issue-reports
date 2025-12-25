@@ -8,8 +8,9 @@ py_binary(
     ],
     main = "__main__.py",
     deps = [
-        "@pip//cowsay",
         "//mattress",
+        # somehow the rules_python config started breaking!
+        "@pip//bazel_debugpy",
     ],
 )
 
@@ -20,7 +21,6 @@ py_test(
     ],
     main = "__main__.py",
     deps = [
-        "@pip//cowsay",
         "//mattress",
     ],
 )

@@ -31,7 +31,7 @@ def main() -> None:
 
     others = shlex.split(args.args) if args.args else []
 
-    args = [
+    cmd = [
         args.bazel,
         args.mode,
         f"--@rules_python//python/config_settings:debugger={args.hub_name}//bazel_debugpy",
@@ -39,9 +39,9 @@ def main() -> None:
     if args.mode == "test":
         env["bzl_pydev_config"] = info_json
     else:
-        args.append(f"--test_env=bzl_pydev_config={info_json}")
-    args.extend(others)
-    os.execvpe(args[0], args, env)
+        cmd.append(f"--test_env=bzl_pydev_config={info_json}")
+    cmd.extend(others)
+    os.execvpe(cmd[0], cmd, env)
 
 
 

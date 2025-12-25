@@ -1,2 +1,2 @@
 cowsay==6.1
-bazel-debugpy==0.1.0
+bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@1ba5d34984e9387b24f35abe23f1f498f752daf7#subdirectory=rules_python/vscode_debugger/bazel_debugpy

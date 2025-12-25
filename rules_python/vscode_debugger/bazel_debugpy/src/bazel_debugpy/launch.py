@@ -35,6 +35,7 @@ def main() -> None:
         args.bazel,
         args.mode,
         f"--@rules_python//python/config_settings:debugger=@{args.hub_name}//bazel_debugpy",
+        args.target,
     ]
     if args.mode == "test":
         env["bzl_pydev_config"] = info_json

@@ -10,9 +10,9 @@
             "args": [
                 "--hub-name=pip",
                 "--bazel=./bazel",
-                "test",
+                "run",
                 "${input:pickBazelPyRunTarget}",
-                "${input:BazelArgs}"
+                "", // "${input:BazelArgs}"
             ],
             "console": "integratedTerminal",
             "justMyCode": false,
@@ -34,7 +34,7 @@
                 "--bazel=./bazel",
                 "test",
                 "${input:pickBazelPyTestTarget}",
-                "${input:BazelArgs}"
+                "", // "${input:BazelArgs}"
             ],
             "console": "integratedTerminal",
             "env": {
@@ -67,7 +67,6 @@
         {
             "id": "BazelArgs",
             "type": "promptString",
-            "default": "",
             "description": "Optional args to pass to executable as single string",
         },
     ]

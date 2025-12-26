@@ -9,8 +9,6 @@ py_binary(
     main = "__main__.py",
     deps = [
         "//mattress",
-        # somehow the rules_python config started breaking!
-        "@pip//bazel_debugpy",
     ],
 )
 
@@ -23,4 +21,13 @@ py_test(
     deps = [
         "//mattress",
     ],
+)
+
+
+# There is a bug with rules_python that does not propagate imports
+# for the added lib. So I have to put site customize here for now.
+py_library(
+    name = "debugpy",
+    srcs = ["sitecustomize.py"],
+    visibility = ["//:__subpackages__"],
 )

@@ -6,10 +6,8 @@
             "name": "Python: Bazel py run",
             "type": "debugpy",
             "request": "launch",
-            "module": "bazel_debugpy.launch",
+            "program": "./.vscode/launch.py",
             "args": [
-                "--hub-name=pip",
-                "--bazel=./bazel",
                 "run",
                 "${input:pickBazelPyRunTarget}",
                 "", // "${input:BazelArgs}"
@@ -28,10 +26,8 @@
             "name": "Python: Bazel py test",
             "type": "debugpy",
             "request": "launch",
-            "module": "bazel_debugpy.launch",
+            "program": "./.vscode/launch.py",
             "args": [
-                "--hub-name=pip",
-                "--bazel=./bazel",
                 "test",
                 "${input:pickBazelPyTestTarget}",
                 "", // "${input:BazelArgs}"

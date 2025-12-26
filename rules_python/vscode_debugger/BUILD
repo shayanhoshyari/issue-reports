@@ -9,6 +9,9 @@ py_binary(
     main = "__main__.py",
     deps = [
         "//mattress",
+        # See readme when to use these for issue reproduction
+        # "//debugpy:venv",
+        # "//debugpy:imports",
     ],
 )
 

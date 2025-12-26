@@ -8,11 +8,19 @@
 
 ## Repro rules_python bug
 
-To see the bug, move `sitecustomize.py` and its portion of `BUILD` to separate `debugpy` folder.
+I have made a hook to add a `.pth` file or `sitecustomize.py` file to the `sys.path` so the executable can connect to the debugger.
 
-- Then if you run:
-    ```
-    $ ./bazel run --@rules_python//python/config_settings:debugger=//debugpy //:app
-    ```
-    it prints `[]` for the `sys.path` that contains `debugpy`.
-- But if you add `//debugpy` explcitly to deps of `//:app`, you correctly see the import.
+For easy debugging, at beginning of runtime, I print if the hook is on the path.
+
+It is expected that all these 6 variants work, but 2 and 3 don't work. 4, 5, 6 are not really practical and are just here to show that
+the py_library for the hook is defined correctly 
+
+| # | Summary | Command | Works |
+|---|---------|---------|-------|
+| 1 | --debugger + put in root | `./bazel run //:app --@rules_python//python/config_settings:debugger=//:debugpy` | ✅ |
+| 2  | --debugger +  put in venv site-packages | `./bazel run //:app --@rules_python//python/config_settings:debugger=//debugpy:venv` | ❌ |
+| 3 | --debugger +  use imports | `./bazel run //:app --@rules_python//python/config_settings:debugger=//debugpy:imports` | ❌ |
+| 4 | explicit dep + put in root | Add `//:debugpy` to `//:app.deps` + `./bazel run //:app` | ✅ |
+| 5 | explicit dep + put in venv site-packages | Add `//debugpy:venv` to `//:app.deps` + `./bazel run //:app` | ✅ |
+| 6 | explicit dep + use imports | Add `//debugpy:imports` to `//:app.deps` + `./bazel run //:app` | ✅ |
+

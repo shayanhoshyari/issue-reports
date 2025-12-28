@@ -1,26 +1,27 @@
 # rules_python + Vcode debugger
 
-- You need a venv (no dep in venv needed). You can get one with `./bazel run //requirements:venv`.
-- Open vscode, and ensure `python`, and `bazel` extensions are installed.
-- `Bazel: run py run`
-- Select `//:app`
+## Demo 
+
+- Install vscode recommended extensions: `Cmd + P` -> `Show recommended extensions`
+- Select the target `Bazel: run py run` or `Bazel: test py test` in vscode. Only a python interpreter is needed so vscode can startup with (system install works).
+  - py run: for tests and binaries. No sandboxing. You can type `//:app` or `//:app_test` in the input field.
+  - py tests: for tests only. With sandboxing. You can type `//:app_test` in the input field.
 - See breakpoints working in both main process (`mattress`) and subprocess (`mattress/command.py`).
 
-## Repro rules_python bug
+![](./docs/demo.gif)
 
-I have made a hook to add a `.pth` file or `sitecustomize.py` file to the `sys.path` so the executable can connect to the debugger.
+## How does it work?
 
-For easy debugging, at beginning of runtime, I print if the hook is on the path.
+```mermaid
+flowchart TD
+    vscode["vscode (debugpy server)"]-->|configured in launch.json| launch_py["launch.py"]
+    launch_py-->|"set secret and port in env var <br>+ include sitecustomize with --debugger"| bazel["bazel run/test"]
+    bazel --> py_binary["py_binary / py_test"]
+    py_binary --> |debugpy attach via sitecustomize + env var| vscode
+    py_binary --> |subprocess launch| subprocess
+    subprocess --> |"debugpy attach via patched entrypoint<br>(debugpy default behavior)"| vscode
+```
 
-It is expected that all these 6 variants work, but 2 and 3 don't work. 4, 5, 6 are not really practical and are just here to show that
-the py_library for the hook is defined correctly 
+In addition we pass down [PYDEVD_RESOLVE_SYMLINKS](https://github.com/microsoft/debugpy/issues/743#issuecomment-1112580721) to each process to make sure that the debugger hits breakpoints in original source and not the symlinks in bazel output.
 
-| # | Summary | Command | Works |
-|---|---------|---------|-------|
-| 1 | --debugger + put in root | `./bazel run //:app --@rules_python//python/config_settings:debugger=//:debugpy` | ✅ |
-| 2  | --debugger +  put in venv site-packages | `./bazel run //:app --@rules_python//python/config_settings:debugger=//debugpy:venv` | ❌ |
-| 3 | --debugger +  use imports | `./bazel run //:app --@rules_python//python/config_settings:debugger=//debugpy:imports` | ❌ |
-| 4 | explicit dep + put in root | Add `//:debugpy` to `//:app.deps` + `./bazel run //:app` | ✅ |
-| 5 | explicit dep + put in venv site-packages | Add `//debugpy:venv` to `//:app.deps` + `./bazel run //:app` | ✅ |
-| 6 | explicit dep + use imports | Add `//debugpy:imports` to `//:app.deps` + `./bazel run //:app` | ✅ |
-
+In `launch.json` on can further set or unset [IDE_PROJECT_ROOTS](https://github.com/microsoft/debugpy/issues/824#issuecomment-1018518479) in lieu of `justMyCode`.

@@ -6,60 +6,33 @@
             "name": "Python: Bazel py run",
             "type": "debugpy",
             "request": "launch",
-            "program": "./.vscode/launch.py",
-            "args": [
-                "run",
-                "${input:pickBazelPyRunTarget}",
-                "", // "${input:BazelArgs}"
-            ],
+            "program": "./.vscode/debugpy/launch.py",
+            "args": ["run", "${input:BazelArgs}"],
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {
-                // This is necessary so that the the debugger hits breakpoints in original
-                // source and not the symlinks in bazel output.
-                "PYDEVD_RESOLVE_SYMLINKS": "1",
-                // This is needed to get `justMyCode` to work correctly.
-                // "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+                // Due to how Bazel sets things up justMyCode: true won't work, instead set this env var
+                // Comment it out to get justMyCode: false
+                "IDE_PROJECT_ROOTS": "${workspaceFolder}",
             },
         },
         {
             "name": "Python: Bazel py test",
             "type": "debugpy",
             "request": "launch",
-            "program": "./.vscode/launch.py",
-            "args": [
-                "test",
-                "${input:pickBazelPyTestTarget}",
-                "", // "${input:BazelArgs}"
-            ],
+            "program": "./.vscode/debugpy/launch.py",
+            "args": ["test", "${input:BazelArgs}"],
             "console": "integratedTerminal",
+            "justMyCode": false,
             "env": {
-                // This is necessary so that the the debugger hits breakpoints in original
-                // source and not the symlinks in bazel output.
-                "PYDEVD_RESOLVE_SYMLINKS": "1",
-                // This is needed to get `justMyCode` to work correctly.
+                // Due to how Bazel sets things up justMyCode: true won't work, instead set this env var
+                // Comment it out to get justMyCode: false
                 "IDE_PROJECT_ROOTS": "${workspaceFolder}",
             },
         },
 
     ],
     "inputs": [
-        {
-            "id": "pickBazelPyRunTarget",
-            "type": "command",
-            "command": "bazel.pickTarget",
-            "args": {
-              "query": "kind('py_test|py_binary', //...:*)",
-            },
-        },
-        {
-            "id": "pickBazelPyTestTarget",
-            "type": "command",
-            "command": "bazel.pickTarget",
-            "args": {
-              "query": "kind('py_test', //...:*)",
-            },
-        },
         {
             "id": "BazelArgs",
             "type": "promptString",

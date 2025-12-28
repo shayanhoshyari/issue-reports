@@ -1,3 +1,0 @@
-cowsay==6.1
-# just do all in the same place. I gave up on this.
-# bazel-debugpy @ git+https://github.com/shayanhoshyari/issue-reports@5754366a02d82d8c670388e1fe3513fe273ddadf#subdirectory=rules_python/vscode_debugger/bazel_debugpy

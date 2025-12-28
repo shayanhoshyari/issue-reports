@@ -11,5 +11,6 @@ def _has_debugger_hook(path : str) -> bool:
     return False
 
 if __name__ == "__main__":
+
     print("Debugger hook:", [p for p in sys.path if _has_debugger_hook(p)])
     mattress.announce("Constantine")

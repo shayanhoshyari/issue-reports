@@ -1,0 +1,11 @@
+{
+    // with true, if you open a symlink, opens the original file.
+    "symlink-follow.autoFollow": false,
+
+    "files.exclude": {
+        "**/bazel-*": true,
+        "**/.venv": true,
+        "**/.mypy_cache": true,
+        "**/__pycache__": true,
+    },
+}

@@ -1,0 +1,7 @@
+load("@rules_python//python/uv:lock.bzl", "lock")
+
+lock(
+    name = "requirements",
+    srcs = ["requirements.in"],
+    out = "requirements.lock",
+)

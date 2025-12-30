@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname $0)"
+
+exec ./bazel run \
+    --ui_event_filters=-info,-warning,-debug,-progress \
+    --noshow_progress \
+    --show_result 0 \
+    @python_3_13//:python3 \
+    -- \
+    "$@"

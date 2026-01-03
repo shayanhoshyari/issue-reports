@@ -46,6 +46,7 @@ RULEDIR: bazel-out/x86-fastbuild/bin/testapp
 
 ## Predefined path variables
 
+Docs: https://bazel.build/reference/be/make-variables#predefined_label_variables
 
 `//testapp:show_app_output` demonstrates predefined variables related to source
 and output paths.
@@ -77,6 +78,12 @@ another repo
  location: bazel-out/darwin_arm64-opt-exec/bin/external/rules_multitool++multitool+multitool/tools/gh/gh
  rlocationpath: rules_multitool++multitool+multitool/tools/gh/gh
 ```
+
+Some historical notes
+
+- First there was just `location`, but it turned out problematic as there was no way to distinguish when runfile path is needed vs. when path under workspace: https://github.com/bazelbuild/bazel/issues/2475#issuecomment-339318016, so `execpath`, `rootpath` were added. The names are not really helpful to tell one which is which.
+- Then when bazel mod came out, the existence of external repos broke things + workspace, and they had to add `rlocationpath`: https://github.com/bazelbuild/bazel/issues/15029. Though onces workspaces go away I think we have  `rlocation path = os.path.join(_main, rootpath)`
+
 
 ## BUILD_WORKSPACE_DIRECTORY
 

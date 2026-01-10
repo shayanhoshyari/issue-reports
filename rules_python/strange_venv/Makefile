@@ -5,7 +5,7 @@ lock:
 	cd rules_dummy && bazelisk run //requirements
 
 run_rules_dummy:
-	cd rules_dummy && bazelisk run ${RUN_ARGS} //tool
+	cd rules_dummy && bazelisk run ${RUN_ARGS} @rules_dummy//tool
 
 run:
 	bazelisk run ${RUN_ARGS} @rules_dummy//tool

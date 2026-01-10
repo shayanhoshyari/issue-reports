@@ -1,0 +1,4 @@
+ignore_directories([
+    # this is a separate module
+    "./rules_dummy",
+])

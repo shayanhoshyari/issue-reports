@@ -1,5 +1,6 @@
---extra-index-url https://artifactory-uw2.adobeitc.com/artifactory/api/pypi/pypi-adobeshared-release/simple
-
+# Package without namespace ar okay.
 cowsay
 rich
-platforms.dev_tools.multitool
+
+# Packages with name spaces cause the import error in other projects
+google-cloud-storage

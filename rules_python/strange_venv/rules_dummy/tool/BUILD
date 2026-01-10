@@ -6,6 +6,7 @@ py_binary(
     main = "__main__.py",
     visibility = ["//visibility:private"],
     deps = [
-        "@pip//platforms_dev_tools_multitool",
+        "@pip//cowsay",
+        "@pip//google_cloud_storage",
     ],
 )

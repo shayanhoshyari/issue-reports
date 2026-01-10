@@ -1,0 +1,7 @@
+# don't make another lock file
+common --lockfile_mode=off
+
+# For testing within the rules_dummy itself
+common --@rules_python//python/config_settings:venvs_site_packages=yes
+common --@rules_python//python/config_settings:bootstrap_impl=script
+build --incompatible_default_to_explicit_init_py

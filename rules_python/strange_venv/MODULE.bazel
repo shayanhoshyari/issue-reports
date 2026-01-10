@@ -1,0 +1,8 @@
+module(name="broken_venv")
+
+bazel_dep(name = "rules_dummy")
+local_path_override(module_name="rules_dummy", path="./rules_dummy")
+
+bazel_dep(name = "rules_python", version = "1.8.0-rc1")
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(is_default = True, python_version = "3.13")

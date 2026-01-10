@@ -1,0 +1,5 @@
+--extra-index-url https://artifactory-uw2.adobeitc.com/artifactory/api/pypi/pypi-adobeshared-release/simple
+
+cowsay
+rich
+platforms.dev_tools.multitool

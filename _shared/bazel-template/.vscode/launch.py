@@ -50,7 +50,7 @@ def main() -> None:
 
     # Command line arguments
     cmd = [
-        "./bazel",
+        "bazel",
         args.mode,
         # This is necessary so that the the debugger hits breakpoints in original
         # source and not the symlinks in bazel output.

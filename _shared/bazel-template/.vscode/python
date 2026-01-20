@@ -9,11 +9,9 @@
 
 set -e
 
-# Navigate to the workspace root (parent of .vscode directory)
-cd "$(dirname "$0")/.."
-
 # Execute the Bazel-managed Python interpreter
 exec bazel --quiet run \
+    --run_in_cwd \
     @rules_python//python/bin:python \
     -- \
     "$@"

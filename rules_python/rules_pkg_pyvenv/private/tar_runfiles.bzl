@@ -49,7 +49,6 @@ main is meant to be light and just files from this module that change often
 """
 
 load("@rules_python//python:defs.bzl", "PyRuntimeInfo")
-load("//bazel_infra/gitops/utils:defs.bzl", "bazel_build_use_debugpy")
 
 # Any file matching these groups will be added to its own layer.
 # The reason is that these packages are huge, and putting them in
@@ -151,7 +150,6 @@ def _tar_runfiles(ctx):
                 "--py-binary",
                 py_binary.files_to_run.executable.short_path,
             ],
-            use_default_shell_env = bazel_build_use_debugpy.value(ctx),
         )
 
     return [
@@ -185,6 +183,6 @@ tar_runfiles = rule(
             executable = True,
             cfg = "exec",
         ),
-    } | bazel_build_use_debugpy.attrs,
+    },
     doc = "A rule which iterates over all runfiles of a given py_binary. Replacement for py_image_layer that supports symlinks.",
 )

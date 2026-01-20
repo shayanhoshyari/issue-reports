@@ -15,7 +15,7 @@ This repository relies on **direnv** to manage development environments and path
 Add the hook to your shell configuration (e.g., `~/.zshrc`, `~/.bashrc`):
 
 ```bash
-eval "$(direnv hook <your_shell_name>)"
+eval "$(direnv hook <zsh|fish|bash>)"
 ```
 
 ### 3. Activate

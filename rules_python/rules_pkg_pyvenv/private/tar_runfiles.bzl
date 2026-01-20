@@ -89,15 +89,18 @@ def _file_manifest_line(file, group):
     # Actual file, resolve it and write the actual file.
     return json.encode({"path": file.path, "short": file.short_path, "link": "no", "group": group})
 
-def _symlink_manifest_line(file, group):
+def _symlink_manifest_line(target_short_path, link_short_path, group):
     """
     Convert a symlink to a manifest line.
+
+    target_short_path: short path os symlinks target
+    link_short_path: link path of the symlink itself.
     """
 
     # This is a link, but don't trust the value, use the link provided here.
     # Provided value is a short path.
     # https://bazel.build/rules/lib/builtins/SymlinkEntry
-    return json.encode({"path": file.target_file.short_path, "short": file.path, "link": "path", "group": group})
+    return json.encode({"path": target_short_path, "short": link_short_path, "link": "path", "group": group})
 
 def _tar_runfiles(ctx):
     """
@@ -123,7 +126,14 @@ def _tar_runfiles(ctx):
     # see reason why we have both: https://github.com/bazel-contrib/rules_python/issues/3439#issuecomment-3638127812
     for f in default_info.default_runfiles.symlinks.to_list():
         # group = main is a heuristic, symlinks are mainly from py_binary that makes the .venv
-        line = _symlink_manifest_line(f, "main")
+        line = _symlink_manifest_line(f.target_file.short_path, f.path, "main")
+        manifest_contents["main"].append(line)
+
+    for f in default_info.default_runfiles.root_symlinks.to_list():
+        # group = main is a heuristic, symlinks are mainly from py_binary that makes the .venv
+        # "../" + file.source because source of default_runfiles.symlinks is from _main
+        # but root_symlinks from repo root
+        line = _symlink_manifest_line(f.target_file.short_path, "../" + f.path, "main")
         manifest_contents["main"].append(line)
 
     tarballs = {}

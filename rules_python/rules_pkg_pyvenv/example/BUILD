@@ -8,6 +8,7 @@ py_binary(
     main = "__main__.py",
     deps = [
         "@rules_pkg_pyvenv_pip_dev//cowsay",
+        "@rules_pkg_pyvenv_pip_dev//google_cloud_storage",
     ],
 )
 

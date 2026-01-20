@@ -1,0 +1,6 @@
+# The REPO.bazel file marks the boundary of a repository and can be used
+# to configure repository-wide settings like ignoring files or directories.
+#
+# For more information, see:
+# https://bazel.build/rules/lib/globals/repo#repo
+# https://bazel.build/concepts/build-ref#repo-bazel

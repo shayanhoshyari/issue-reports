@@ -1,0 +1,20 @@
+module(name = "bazel_template", version = "0.0.1")
+
+bazel_dep(name = "rules_uv", version = "0.89.2")
+bazel_dep(name = "rules_python", version = "1.8.0-rc1")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.14",
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    experimental_index_url = "https://pypi.org/simple",
+    hub_name = "pip",
+    python_version = "3.14",
+    requirements_lock = "//requirements:requirements.txt",
+    enable_implicit_namespace_pkgs = True,
+)
+use_repo(pip, "pip")

@@ -1,7 +1,6 @@
 module(name = "rules_pkg_pyvenv", version = "0.0.1")
 
-bazel_dep(name = "rules_uv", version = "0.89.2")
-bazel_dep(name = "rules_python", version = "1.8.0-rc1")
+bazel_dep(name = "rules_shell", version = "0.6.1")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
@@ -9,12 +8,17 @@ python.toolchain(
     python_version = "3.14",
 )
 
+# ===== For the example only ====
+
+bazel_dep(name = "rules_python", version = "1.8.0", dev_dependency = True)
+bazel_dep(name = "rules_uv", version = "0.89.2", dev_dependency = True)
+
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     enable_implicit_namespace_pkgs = True,
     experimental_index_url = "https://pypi.org/simple",
-    hub_name = "pip",
+    hub_name = "rules_pkg_pyvenv_pip_dev",
     python_version = "3.14",
     requirements_lock = "//example/requirements:requirements.txt",
 )
-use_repo(pip, "pip")
+use_repo(pip, "rules_pkg_pyvenv_pip_dev")

@@ -50,6 +50,9 @@ main is meant to be light and just files from this module that change often
 
 load("@rules_python//python:defs.bzl", "PyRuntimeInfo")
 
+# For Load(...), only allow //:defs.bzl to load
+visibility(["//"])
+
 # Any file matching these groups will be added to its own layer.
 # The reason is that these packages are huge, and putting them in
 # separate layers, make those large layers cacheable.

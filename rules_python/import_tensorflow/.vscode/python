@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# This script is used by VS Code (via settings.json "python.defaultInterpreterPath")
+# to use the Bazel-managed Python interpreter for Intellisense and Debugging.
+# It acts as a wrapper around "bazel run @rules_python//python/bin:python".
+#
+# This allows VS Code to work without a system Python installed, and ensures
+# that the environment matches what Bazel uses.
+
+set -e
+
+# Execute the Bazel-managed Python interpreter
+exec bazel --quiet run \
+    --run_in_cwd \
+    @rules_python//python/bin:python \
+    -- \
+    "$@"

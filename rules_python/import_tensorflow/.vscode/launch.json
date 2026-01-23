@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: Bazel py run",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./.vscode/launch.py",
+            "args": ["run", "${input:BazelArgs}"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                // Due to how Bazel sets things up justMyCode: true won't work, instead set this env var
+                // Comment it out to get justMyCode: false
+                "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+            },
+        },
+        {
+            "name": "Python: Bazel py test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./.vscode/launch.py",
+            "args": ["test", "${input:BazelArgs}"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                // Due to how Bazel sets things up justMyCode: true won't work, instead set this env var
+                // Comment it out to get justMyCode: false
+                "IDE_PROJECT_ROOTS": "${workspaceFolder}",
+            },
+        },
+
+    ],
+    "inputs": [
+        {
+            "id": "BazelArgs",
+            "type": "promptString",
+            "description": "Optional args to pass to executable as single string",
+        },
+    ]
+}
